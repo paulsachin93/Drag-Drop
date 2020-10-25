@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<head>
+    <title>Drag n Drop</title>
+</head>
+<style>
+    .ddsample{
+        width: 100px;
+        height: 100px;
+        background-color: lightpink;
+    }
+    .myImgStyle
+    {
+        width: 100px;
+        height: 100px;
+        background-color: lightpink;
+    }
+    .myImg2Style
+    {
+        width: 100px;
+        height: 100px;
+        background-color: lightgrey;
+    }
+    .myImg1Style
+    {
+        width: 100px;
+        height: 100px;
+        background-color: lightpink;
+    }
+</style>
+<body>
+    <button onclick = "random()">Arrange Randomly</button>
+    <div id="ddsample"></div>
+
+    <div><h2>My Favorite :</h2></div>
+    <div id="ddsample1"></div>
+    <ul>
+        <li id='img0'>No Favortie</li>
+        <li id='img1'>No Favortie</li>
+        <li id='img2'>No Favortie</li>
+        <li id='img3'>No Favortie</li>
+    </ul>
+</body>
+<script>
+    let block1=[{
+        name:"Black Panther",image:"https://i.ibb.co/M98B0Pg/blackpanther.jpg"
+    },{
+        name:"Captain America",image:"https://i.ibb.co/tD3XYST/captainamerica.jpg"
+    },{
+        name:"Fantastic Beasts",image:"https://i.ibb.co/3fFJ2BX/fantastic.jpg"
+    },{
+        name:"Frozen",image:"https://i.ibb.co/WzhdMrf/frozen.jpg"
+    },{
+        name:"GI Joe",image:"https://i.ibb.co/s2MzrKQ/gijoe.jpg"
+    },{
+        name:"Harry Potter",image:"https://i.ibb.co/m8stVHL/harrypotter.jpg"
+    },{
+        name:"Hulk",image:"https://i.ibb.co/09X24qh/hulk.jpg"
+    },{
+        name:"Inception",image:"https://i.ibb.co/chb6MyP/inception.jpg"
+    },{
+        name:"Interstellar",image:"https://i.ibb.co/CsQ9KH3/interstellar.jpg"
+    },{
+        name:"Iron Man",image:"https://i.ibb.co/5Lr8kxH/ironman.jpg"
+    },{
+        name:"John Carter",image:"https://i.ibb.co/ph5FTwr/johncarter.jpg"
+    },{
+        name:"Logan",image:"https://i.ibb.co/XXLnRB1/logan.jpg"
+    }
+]; 
+// for (var i = 0; i < block1.length; i += 1) {
+//     var image = getRandomItem(block1);
+//     block1[i].innerHTML = image.name + '<img src="'+image.image+'">';
+// }
+
+function allowDrop(event) {
+  event.preventDefault();
+}function drag(event) {
+  event.dataTransfer.setData("text", event.target.id);
+}
+    // let block2=["","","","","","","","","","","",""];
+    let block3=["","","",""];
+    let dragImageIndex=-1;
+    show();
+   
+    function allowDrop(ev)
+    {
+          ev.preventDefault();
+    }
+    
+    function drag(ev,dragIndex)
+    {
+      dragImageIndex=dragIndex;
+      console.log(dragIndex)
+    }
+
+    
+    function drop(ev,dropIndex)
+    {
+         ev.preventDefault();
+         block3[dropIndex]=block1[dragImageIndex].image;
+         document.getElementById("img"+dropIndex).innerHTML = block1[dragImageIndex].name
+         block1[dragImageIndex]="";
+         dragImageIndex=-1;
+         show();
+    }
+
+    // function showDragImage(myIndex,img)
+    // {
+    //     return "<img class='myImgStyle' src='"+img+"'"
+    //     +"draggable='true'" 
+    //     +"ondragstart='drag(event,"
+    //     +myIndex +")'/>";
+    // }
+    
+    function showDropImage(myIndex,img)
+    {
+        return "<img class='myImg2Style' src='"+img+"'"
+        +"ondrop='drop(event,"+myIndex +")'" 
+        +"ondragover='allowDrop(event)'/>" ;
+        
+    }
+    
+    function showDropImage1(myIndex,img)
+    {
+        return "<img class='myImg2Style' src='"+img+"'" 
+        +"ondrop='drop1(event,"+myIndex +")'" 
+        +"ondragover='allowDrop(event)'/><img class='myImg2Style' src='"+img+"'" 
+        +"ondrop='drop2(event,"+myIndex +")'" 
+        +"ondragover='allowDrop(event)'/><img class='myImg2Style' src='"+img+"'" 
+        +"ondrop='drop3(event,"+myIndex +")'" 
+        +"ondragover='allowDrop(event)'/><img class='myImg2Style' src='"+img+"'" 
+        +"ondrop='drop4(event,"+myIndex +")'" 
+        +"ondragover='allowDrop(event)'/>" ;
+    }
+    
+    function show()
+    {
+        document.getElementById("ddsample").innerHTML =""
+        block1.forEach(function(obj, index) {
+         var img = new Image();
+        img.src = obj.image;
+        img.setAttribute("class","ddsample");
+        // img.setAttribute("alt", "image");
+        img.setAttribute("ondrag", "drag(event,"+index+")")
+        document.getElementById("ddsample").appendChild(img);
+        });
+        
+        let str="";
+
+        str+="<br/>";
+        i = 0;
+        block3.forEach((obj)=>{
+        str+=showDropImage(i++,obj);
+        })
+        let div1=document.getElementById("ddsample1");
+        div1.innerHTML=str;
+  
+    }
+    function getShuffledArr (arr){
+        return [...arr].map( (_, i, arrCopy) => {
+            var rand = i + ( Math.floor( Math.random() * (arrCopy.length - i) ) );
+            [arrCopy[rand], arrCopy[i]] = [arrCopy[i], arrCopy[rand]]
+            return arrCopy[i]
+        })
+    }
+   function random()
+    {
+
+        block1 = getShuffledArr(block1)
+        document.getElementById("ddsample").innerHTML =""
+        block1.forEach(function(obj, index) {
+         var img = new Image();
+        img.src = obj.image;
+        img.setAttribute("class","ddsample");
+        // img.setAttribute("alt", "image");
+        img.setAttribute("ondrag", "drag(event,"+index+")")
+        document.getElementById("ddsample").appendChild(img);
+        });
+
+    }
+
+</script>
+</html>
